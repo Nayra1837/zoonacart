@@ -1,12 +1,12 @@
-# GlamCart - Cosmetics E-Commerce Platform
+# zoonacart - Cosmetics E-Commerce Platform
 
-## Product Requirements Document (PRD) & Code Audit
+## Product Requirements Document (PRD) 
 
 ---
 
 ## 📋 Executive Summary
 
-**GlamCart** is a full-featured e-commerce platform for luxury cosmetics built with PHP, MySQL, and vanilla JavaScript. The platform provides a complete shopping experience for customers and comprehensive management tools for administrators.
+**zoonacart** is a full-featured e-commerce platform for luxury cosmetics built with PHP, MySQL, and vanilla JavaScript. The platform provides a complete shopping experience for customers and comprehensive management tools for administrators.
 
 **Tech Stack:**
 
@@ -209,7 +209,7 @@ cosmetics/
 
 **Current Settings:**
 
-- `site_name` - Store name (GlamCart)
+- `site_name` - Store name (zoonacart)
 - `site_description` - Tagline
 - `hero_title` - Homepage hero heading
 - `hero_subtitle` - Homepage hero subtext
@@ -290,50 +290,13 @@ cosmetics/
 - [x] Hero content management
 - [x] Admin password change
 
----
-
-## 🐛 Known Issues & Recommendations
-
-### Security Concerns
-
-1. **Plain-text passwords** - Should use bcrypt hashing
-2. **No CSRF protection** - Add tokens to forms
-3. **SQL Injection risk** - Already mitigated with prepared statements ✓
-
-### Performance
-
-1. **No caching** - Consider implementing for static content
-2. **Large images** - Add image optimization on upload
-
-### UX Improvements
-
-1. Add search functionality
-2. Add product filtering by category
-3. Add wishlist feature
-4. Add email notifications for orders
-
----
-
 ## 📊 Test Credentials
 
 | Role  | Email              | Password      |
 | ----- | ------------------ | ------------- |
-| Admin | admin@glamcart.com | admin123      |
+| Admin | admin@zoonacart.com | admin123      |
 | User  | (register new)     | (your choice) |
 
----
-
-## 🚀 Deployment Checklist
-
-1. [ ] Import `database.sql` to MySQL
-2. [ ] Update `config.php` with production DB credentials
-3. [ ] Run `seed.php` to add initial products
-4. [ ] Upload product images to `assets/img/`
-5. [ ] Set proper file permissions
-6. [ ] Enable HTTPS
-7. [ ] Update BASE_URL in `config.php`
-
----
 
 ## 📁 File Summary
 
@@ -363,15 +326,3 @@ cosmetics/
 | js/app.js              | ~200  | Frontend logic                   |
 | assets/style.css       | ~251  | Global styles                    |
 
----
-
-## 🎯 Version History
-
-| Version | Date     | Changes                                            |
-| ------- | -------- | -------------------------------------------------- |
-| 1.0     | Jan 2026 | Initial release with full e-commerce functionality |
-
----
-
-_Document generated: January 26, 2026_
-_Platform: GlamCart Cosmetics E-Commerce_
