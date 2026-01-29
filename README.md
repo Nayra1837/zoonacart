@@ -141,33 +141,6 @@ $username = 'root';
 $password = '';
 ```
 
-------------------------------------------------------------------------
-
-## 🛠️ Troubleshooting
-
-### MySQL Access Denied
-
--   Check MySQL is running in XAMPP
--   Check username and password in config.php
-
-### Images Not Showing
-
--   Put images in `assets/img/`
--   Check image names in database
-
-### Database Error
-
--   Import database.sql again
--   Select correct database (zoonacart)
-
-------------------------------------------------------------------------
-
-## 🎓 Project Use
-
-This project is created for **BCA / MCA / College Project / Learning
-Purpose**.
-
-------------------------------------------------------------------------
 
 ## 👨‍💻 Author
 
