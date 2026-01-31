@@ -6,9 +6,9 @@ $success = '';
 
 // Handle Status Update
 if (isset($_POST['update_status'])) {
-    $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
-    $stmt->execute([$_POST['status'], $_POST['order_id']]);
-    $success = "Order status updated!";
+    $stmt = $pdo->prepare("UPDATE orders SET status = ?, tracking_number = ?, courier_name = ? WHERE id = ?");
+    $stmt->execute([$_POST['status'], $_POST['tracking_number'], $_POST['courier_name'], $_POST['order_id']]);
+    $success = "Order status & tracking updated!";
 }
 
 // Handle Order Deletion
@@ -18,14 +18,43 @@ if (isset($_GET['delete'])) {
     $success = "Order deleted successfully!";
 }
 
+// Handle Tracking Sync
+if (isset($_POST['sync_tracking'])) {
+    require_once '../includes/Shiprocket.php';
+    $shiprocket = new Shiprocket();
+    
+    // Fetch tracked orders
+    $orders = $pdo->query("SELECT * FROM orders WHERE status != 'completed' AND tracking_number IS NOT NULL")->fetchAll();
+    
+    $count = 0;
+    foreach ($orders as $o) {
+        $tracking = $shiprocket->trackOrder($o['tracking_number']); // Assuming AWB is tracking number
+        // Shiprocket tracking logic depends on their response structure
+        // 7 = Delivered in their status map (Test Mode returns this)
+        if (isset($tracking['tracking_data']['shipment_status']) && $tracking['tracking_data']['shipment_status'] == 7) {
+            $stmt = $pdo->prepare("UPDATE orders SET status = 'completed' WHERE id = ?");
+            $stmt->execute([$o['id']]);
+            $count++;
+        }
+    }
+    $success = "Synced! {$count} orders marked as Completed.";
+}
+
 $orders = $pdo->query("SELECT o.*, u.name as customer_name FROM orders o JOIN users u ON o.user_id = u.id ORDER BY o.order_date DESC")->fetchAll();
 include '../includes/header.php';
 ?>
 
 <div class="container" style="padding: 2.5rem 5%;">
-    <div style="margin-bottom: 2rem;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Order Fulfillment</h1>
-        <p style="color: #64748b;">Track and manage customer beauty orders with precision.</p>
+    <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Order Fulfillment</h1>
+            <p style="color: #64748b;">Track and manage customer beauty orders with precision.</p>
+        </div>
+        <form method="POST">
+            <button type="submit" name="sync_tracking" class="btn btn-primary" style="padding: 0.8rem 1.5rem;">
+                <i class="fa-solid fa-arrows-rotate"></i> Sync Shiprocket
+            </button>
+        </form>
     </div>
 
     <?php include 'admin_nav.php'; ?>
@@ -67,17 +96,20 @@ include '../includes/header.php';
                             <td style="padding: 1.5rem; text-align: center;">
                                 <form method="POST" style="display: inline-block;">
                                     <input type="hidden" name="order_id" value="<?php echo $o['id']; ?>">
-                                    <select name="status" onchange="this.form.submit()" style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 0; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; cursor: pointer; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary)'">
+                                        <select name="status" style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 0.5rem; font-size: 0.75rem; margin-bottom: 0.5rem; width: 100%;">
                                         <option value="pending" <?php echo $o['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
                                         <option value="completed" <?php echo $o['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
                                         <option value="cancelled" <?php echo $o['status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                                     </select>
+                                    <input type="text" name="courier_name" placeholder="Courier Name" value="<?php echo $o['courier_name']; ?>" style="display: block; width: 100%; margin-bottom: 0.25rem; padding: 0.4rem; border: 1px solid #e2e8f0; font-size: 0.75rem;">
+                                    <input type="text" name="tracking_number" placeholder="Tracking ID" value="<?php echo $o['tracking_number']; ?>" style="display: block; width: 100%; margin-bottom: 0.5rem; padding: 0.4rem; border: 1px solid #e2e8f0; font-size: 0.75rem;">
+                                    <button type="submit" class="btn btn-dark" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; width: 100%;">Update</button>
                                     <input type="hidden" name="update_status" value="1">
                                 </form>
                             </td>
                             <td style="padding: 1.5rem; text-align: right;">
                                 <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                                    <a href="../receipt.php?id=<?php echo $o['id']; ?>" class="btn btn-dark" style="padding: 0.6rem 1rem; font-size: 0.8rem; border-radius: 0;" title="View Receipt">
+                                    <a href="<?php echo BASE_URL; ?>receipt.php?id=<?php echo $o['id']; ?>" class="btn btn-dark" style="padding: 0.6rem 1rem; font-size: 0.8rem; border-radius: 0;" title="View Receipt">
                                         <i class="fa-solid fa-file-invoice"></i>
                                     </a>
                                     <a href="?delete=<?php echo $o['id']; ?>" onclick="return confirm('Delete this order?')" class="btn" style="padding: 0.6rem 1rem; font-size: 0.8rem; border-radius: 0; background: #fff1f2; color: #e11d48;" title="Delete Order">

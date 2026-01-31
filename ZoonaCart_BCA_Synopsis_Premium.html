@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoonaCart - Project Synopsis (Premium)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #334155;
+            --accent: #f43f5e;
+            --gold: #d4af37;
+            --bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; color: var(--text-main); background: #f1f5f9; }
+
+        @media print {
+            body { background: white; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            .page { border: none !important; margin: 0 !important; width: 100% !important; box-shadow: none !important; }
+        }
+
+        .page {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20mm auto;
+            padding: 25mm;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Title Page */
+        .title-page { display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; border: 5px double var(--primary); padding: 10mm; }
+        .degree { font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; color: var(--accent); margin-top: 2rem; }
+        .project-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--primary); margin: 3rem 0 1rem; }
+        .subtitle { font-size: 1.1rem; color: var(--text-muted); font-style: italic; max-width: 80%; }
+        
+        .student-box { margin-top: auto; width: 100%; display: flex; justify-content: space-between; padding: 2rem; background: #f8fafc; border-top: 2px solid var(--primary); }
+        .student-info { text-align: left; }
+        .student-info h4 { font-size: 0.9rem; text-transform: uppercase; color: var(--accent); }
+        .student-info p { font-weight: 800; font-size: 1.1rem; }
+
+        .college-info { margin-top: 3rem; text-align: center; }
+        .college-name { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+        .session { font-weight: 600; color: var(--text-muted); }
+
+        /* General Sections */
+        h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); border-bottom: 2px solid var(--accent); display: inline-block; margin: 2rem 0 1rem; padding-bottom: 5px; }
+        h3 { font-size: 1.2rem; color: var(--primary); margin: 1.5rem 0 0.8rem; font-weight: 800; }
+        p { margin-bottom: 1rem; font-size: 1.05rem; text-align: justify; }
+        
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+        .feature-card { padding: 1.2rem; background: #f8fafc; border-left: 4px solid var(--accent); }
+        .feature-card strong { color: var(--primary); display: block; margin-bottom: 5px; }
+
+        .tech-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+        .tech-tag { padding: 5px 15px; background: var(--primary); color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+
+        .diagram-placeholder { margin: 2rem 0; padding: 2rem; border: 2px dashed #cbd5e1; text-align: center; background: #f8fafc; }
+        .diagram-title { font-weight: 800; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; }
+
+        footer { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+        
+        .btn-download { position: fixed; top: 20px; right: 20px; background: var(--accent); color: white; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(244, 63, 94, 0.4); z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <a href="javascript:window.print()" class="btn-download no-print">Export to PDF</a>
+
+    <!-- Page 1: Title Page -->
+    <div class="page">
+        <div class="title-page">
+            <div class="degree">BACHELOR OF COMPUTER APPLICATION (BCA)</div>
+            
+            <h1 class="project-title">ZoonaCart</h1>
+            <p class="subtitle">A Modern E-Commerce Solution with Integrated Digital Wallet & Dynamic Taxation (HSN/GST) Architecture</p>
+
+            <div style="margin-top: 4rem;">
+                <p style="font-weight: bold; color: var(--text-muted);">A PROJECT SYNOPSIS</p>
+                <p>Submitted as a partial requirement for the final semester</p>
+            </div>
+
+            <div class="student-box">
+                <div class="student-info">
+                    <h4>Principal Developer</h4>
+                    <p>Neetu</p>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Roll No: 23266050</span>
+                </div>
+                <div class="student-info" style="text-align: right;">
+                    <h4>Associate Developer</h4>
+                    <p>Sanjana Kumari</p>
+                    <span style="font-size: 0.9rem; color: var(--text-muted);">Roll No: 23266062</span>
+                </div>
+            </div>
+
+            <div class="college-info">
+                <div class="college-name">DAV COLLEGE, JALANDHAR</div>
+                <div class="session">Academic Session: 2025 - 2026</div>
+            </div>
+        </div>
+        <footer>
+            <span>ZoonaCart Project Synopsis</span>
+            <span>Page 1</span>
+        </footer>
+    </div>
+
+    <!-- Page 2: Introduction & Objectives -->
+    <div class="page page-break">
+        <h2>1. Introduction</h2>
+        <p>
+            ZoonaCart is a next-generation E-commerce ecosystem designed to bridge the gap between traditional online retail and modern financial flexibility. Built using a high-performance PHP/MySQL stack, the platform introduces features like a <strong>Native Digital Wallet</strong> and <strong>Dynamic HSN-based Taxation</strong>, ensuring it meets both user convenience and corporate compliance standards.
+        </p>
+
+        <h2>2. Objectives</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <strong>User Centric Design</strong>
+                To provide a premium "App-like" mobile interface that ensures high engagement and conversion rates.
+            </div>
+            <div class="feature-card">
+                <strong>Verified Security</strong>
+                Implementing secure Authentication flows including OTP verification and Google OAuth integration.
+            </div>
+            <div class="feature-card">
+                <strong>Financial Automation</strong>
+                Automating Tax calculations (GST) and managing returns through an instant Wallet refund system.
+            </div>
+            <div class="feature-card">
+                <strong>Admin Empowerment</strong>
+                A centralized dashboard to manage inventory, sales analytics, and customer support with ease.
+            </div>
+        </div>
+
+        <h2>3. Technology Stack</h2>
+        <div class="tech-box">
+            <span class="tech-tag">HTML5 / CSS3</span>
+            <span class="tech-tag">Core PHP 8.x</span>
+            <span class="tech-tag">MySQL RDBMS</span>
+            <span class="tech-tag">JavaScript ES6</span>
+            <span class="tech-tag">Google Identity API</span>
+            <span class="tech-tag">SMTP Mailer</span>
+            <span class="tech-tag">HTML2Canvas</span>
+        </div>
+
+        <footer>
+            <span>ZoonaCart Project Synopsis</span>
+            <span>Page 2</span>
+        </footer>
+    </div>
+
+    <!-- Page 3: Architecture & Flow -->
+    <div class="page page-break">
+        <h2>4. System Architecture</h2>
+        <p>The system follows a modular 3-tier architecture, separating the Presentation (Design), Logic (PHP Engine), and Data (MySQL) layers.</p>
+
+        <div class="diagram-placeholder">
+            <div class="diagram-title">System Architecture Flow</div>
+            <p style="text-align: center; margin-top: 10px; font-weight: bold;">User Interface &rarr; PHP Middle-ware &rarr; MySQL Storage</p>
+            <p style="font-size: 0.8rem; font-style: italic;">The architecture is optimized for low-latency database queries and secure session management.</p>
+        </div>
+
+        <h2>5. Core Modules</h2>
+        <h3>A. Authentication Module</h3>
+        <p>Dual-verification system supporting traditional Email/OTP registration and modern Google One-Tap sign-in for reduced friction.</p>
+
+        <h3>B. Financial Logic Module</h3>
+        <p>A sophisticated module that calculates Taxes not just as a flat rate, but dynamically based on the <strong>HSN Code</strong> of individual products, reflecting real-world business scenarios.</p>
+
+        <h3>C. Wallet & Transaction Engine</h3>
+        <p>A ledger-based wallet system that tracks every 'Debit' and 'Credit'. This module handles instant refunds into the wallet upon return approval, a feature commonly found in Tier-1 E-commerce apps.</p>
+
+        <footer>
+            <span>ZoonaCart Project Synopsis</span>
+            <span>Page 3</span>
+        </footer>
+    </div>
+
+    <!-- Page 4: Future Scope & Conclusion -->
+    <div class="page page-break">
+        <h2>6. Project Innovation</h2>
+        <p>Unlike standard CRUD applications, ZoonaCart incorporates several innovations:</p>
+        <ul>
+            <li><strong>Amazon-Style Invoices</strong>: High-fidelity PDF generation with professional invoice bifurcations.</li>
+            <li><strong>Responsive Glassmorphism</strong>: A UI that adapts fluidly between 4K desktops and compact smartphones.</li>
+            <li><strong>Auto-Healing Database</strong>: Scripts that automatically patch table structures to prevent runtime errors.</li>
+        </ul>
+
+        <h2>7. Conclusion</h2>
+        <p>
+            ZoonaCart serves as a comprehensive demonstration of full-stack engineering. By integrating complex business logic like dynamic taxing and wallet-ledgers with a premium frontend design, the project proves that small-scale applications can achieve enterprise-level quality and reliability.
+        </p>
+
+        <div style="margin-top: 4rem; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 2rem;">
+            <p style="font-weight: 800; font-style: normal;">Project Verified By:</p>
+            <div style="margin-top: 2rem; width: 150px; height: 1px; background: #334155; margin: 0 auto;"></div>
+            <p style="font-size: 0.8rem; margin-top: 5px;">(External Supervisor / HOD Signature)</p>
+        </div>
+
+        <footer>
+            <span>ZoonaCart Project Synopsis</span>
+            <span>Page 4</span>
+        </footer>
+    </div>
+
+</body>
+</html>

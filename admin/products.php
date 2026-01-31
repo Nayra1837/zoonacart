@@ -19,29 +19,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stock = $_POST['stock'];
     $category = $_POST['category'];
     $description = $_POST['description'];
+    $hsn_code = $_POST['hsn_code'] ?? '3304';
+    $tax_percent = $_POST['tax_percent'] ?? 18;
     $id = $_POST['id'] ?? null;
     $image = $_POST['current_image'] ?? '';
 
-    // Handle Image Upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-        $imgName = time() . '_' . $_FILES['image']['name'];
-        if (move_uploaded_file($_FILES['image']['tmp_name'], '../assets/img/' . $imgName)) {
-            $image = $imgName;
+    // Handle Image Upload (Multiple)
+    $primaryImageSet = false;
+    
+    // If updating, check if we already have a primary image
+    if ($id && !$image) {
+        $stmt = $pdo->prepare("SELECT image FROM products WHERE id = ?");
+        $stmt->execute([$id]);
+        $existing = $stmt->fetchColumn();
+        if ($existing) $image = $existing;
+    }
+
+    if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+        $files = $_FILES['images'];
+        $uploadedImages = [];
+        
+        foreach($files['name'] as $key => $name) {
+            if ($files['error'][$key] === 0) {
+                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                $imgName = time() . '_' . uniqid() . '.' . $ext;
+                if (move_uploaded_file($files['tmp_name'][$key], '../assets/img/' . $imgName)) {
+                    $uploadedImages[] = $imgName;
+                    
+                    // Set first new image as primary if none exists or if explicitly replacing
+                    if (!$image) {
+                        $image = $imgName; 
+                    }
+                }
+            }
         }
     }
 
     if ($id) {
-        $stmt = $pdo->prepare("UPDATE products SET name=?, price=?, stock=?, category=?, description=?, image=? WHERE id=?");
-        $stmt->execute([$name, $price, $stock, $category, $description, $image, $id]);
+        $stmt = $pdo->prepare("UPDATE products SET name=?, price=?, stock=?, category=?, description=?, image=?, hsn_code=?, tax_percent=? WHERE id=?");
+        $stmt->execute([$name, $price, $stock, $category, $description, $image, $hsn_code, $tax_percent, $id]);
+        $productId = $id;
         $success = "Product updated successfully!";
     } else {
-        $stmt = $pdo->prepare("INSERT INTO products (name, price, stock, category, description, image) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $price, $stock, $category, $description, $image]);
+        $stmt = $pdo->prepare("INSERT INTO products (name, price, stock, category, description, image, hsn_code, tax_percent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $price, $stock, $category, $description, $image, $hsn_code, $tax_percent]);
+        $productId = $pdo->lastInsertId();
         $success = "Product added successfully!";
+    }
+
+    // Insert into product_images table
+    if (!empty($uploadedImages)) {
+        $stmt = $pdo->prepare("INSERT INTO product_images (product_id, image_path, is_primary) VALUES (?, ?, ?)");
+        foreach($uploadedImages as $index => $img) {
+            $isPrimary = ($img === $image) ? 1 : 0;
+            $stmt->execute([$productId, $img, $isPrimary]);
+        }
     }
 }
 
-$products = $pdo->query("SELECT * FROM products ORDER BY created_at DESC")->fetchAll();
+$stmt = $pdo->query("
+    SELECT p.*, GROUP_CONCAT(pi.image_path) as all_images 
+    FROM products p 
+    LEFT JOIN product_images pi ON p.id = pi.product_id 
+    GROUP BY p.id 
+    ORDER BY p.created_at DESC
+");
+$products = $stmt->fetchAll();
 include '../includes/header.php';
 ?>
 
@@ -97,6 +140,16 @@ include '../includes/header.php';
                         <option>Haircare</option>
                     </select>
                 </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">HSN Code</label>
+                        <input type="text" name="hsn_code" id="form_hsn" required placeholder="3304" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Tax % (GST)</label>
+                        <input type="number" step="0.01" name="tax_percent" id="form_tax" required placeholder="18" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                    </div>
+                </div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -105,14 +158,14 @@ include '../includes/header.php';
                     <textarea name="description" id="form_description" rows="4" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none; resize: none;"></textarea>
                 </div>
                 <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Feature Image</label>
-                    <div style="position: relative; border: 2px dashed #e2e8f0; border-radius: 0; padding: 1rem; text-align: center; cursor: pointer; transition: 0.3s;" onmouseenter="this.style.borderColor='var(--primary)'" onmouseleave="this.style.borderColor='#e2e8f0'">
-                        <input type="file" name="image" id="imageInput" style="position: absolute; inset: 0; opacity: 0; cursor: pointer;" onchange="previewImage(this)">
-                        <div id="imagePreview" style="margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.5rem; color: #94a3b8;"></i>
-                        </div>
-                        <p style="font-size: 0.75rem; color: #64748b;">Drop image or click to browse</p>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Product Images</label>
+                    <div id="imageInputsContainer" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <input type="file" name="images[]" class="form-control" style="border: 1px solid #e2e8f0; padding: 0.5rem; width: 100%; border-radius: 0;" onchange="previewImages()">
                     </div>
+                    <button type="button" onclick="addImageInput()" class="btn" style="margin-top: 0.5rem; background: #f1f5f9; color: var(--primary); font-size: 0.8rem; font-weight: 600; width: 100%; border: 1px dashed var(--primary);">
+                        <i class="fa-solid fa-plus"></i> Add Another Image
+                    </button>
+                    <div id="imagePreview" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
                 </div>
             </div>
 
@@ -152,14 +205,55 @@ include '../includes/header.php';
 </div>
 
 <script>
-function previewImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-height: 100px; max-width: 100%; border-radius: 0;">`;
+function addImageInput() {
+    const container = document.getElementById('imageInputsContainer');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.name = 'images[]';
+    input.className = 'form-control';
+    input.style = 'border: 1px solid #e2e8f0; padding: 0.5rem; width: 100%; border-radius: 0; margin-top: 0.5rem;';
+    input.onchange = previewImages;
+    container.appendChild(input);
+}
+
+function previewImages() {
+    const container = document.getElementById('imagePreview');
+    const inputs = document.querySelectorAll('input[name="images[]"]');
+    
+    // Do not clear container here if you want to keep existing previews from edit mode
+    // But for adding new files, we usually want live preview of what's selected
+    // Let's clear and re-render existing + new
+    
+    // Actually, preserving the "Existing Images" visual and appending "New Previews" is tricky if we mix them in one container.
+    // For simplicity, let's keep one container. 
+    // We should not clear if we want to show existing DB images.
+    // Strategy: existing images are loaded by editProduct.
+    // We will append newly selected previews. 
+    
+    const existingImgs = Array.from(container.querySelectorAll('img[data-existing="true"]'));
+    container.innerHTML = '';
+    
+    // Restore existing
+    existingImgs.forEach(img => container.appendChild(img));
+    
+    inputs.forEach(input => {
+        if (input.files) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '60px';
+                    img.style.height = '60px';
+                    img.style.borderRadius = '5px';
+                    img.style.objectFit = 'cover';
+                    img.style.border = '1px solid #e2e8f0';
+                    container.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
         }
-        reader.readAsDataURL(input.files[0]);
-    }
+    });
 }
 
 function editProduct(product) {
@@ -170,12 +264,41 @@ function editProduct(product) {
     document.getElementById('form_stock').value = product.stock;
     document.getElementById('form_category').value = product.category;
     document.getElementById('form_description').value = product.description;
-    document.getElementById('form_current_image').value = product.image;
+    document.getElementById('form_hsn').value = product.hsn_code || '3304';
+    document.getElementById('form_tax').value = product.tax_percent || '18';
     
-    if (product.image) {
-        document.getElementById('imagePreview').innerHTML = `<img src="../assets/img/${product.image}" style="max-height: 100px; max-width: 100%; border-radius: 0;">`;
-    } else {
-        document.getElementById('imagePreview').innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.5rem; color: #94a3b8;"></i>`;
+    // Reset file inputs
+    const inputContainer = document.getElementById('imageInputsContainer');
+    inputContainer.innerHTML = '<input type="file" name="images[]" class="form-control" style="border: 1px solid #e2e8f0; padding: 0.5rem; width: 100%; border-radius: 0;" onchange="previewImages()">';
+    
+    // Load existing images
+    const previewContainer = document.getElementById('imagePreview');
+    previewContainer.innerHTML = '';
+    
+    if (product.all_images) {
+        const uniqueImages = [...new Set(product.all_images.split(','))];
+        uniqueImages.forEach(img => {
+            if (!img) return;
+            const imgEl = document.createElement('img');
+            imgEl.src = "../assets/img/" + img;
+            imgEl.style.width = '60px';
+            imgEl.style.height = '60px';
+            imgEl.style.borderRadius = '5px';
+            imgEl.style.objectFit = 'cover';
+            imgEl.style.border = '1px solid #e2e8f0';
+            imgEl.setAttribute('data-existing', 'true'); // Mark as existing
+            previewContainer.appendChild(imgEl);
+        });
+    } else if (product.image) {
+        const imgEl = document.createElement('img');
+        imgEl.src = "../assets/img/" + product.image;
+        imgEl.style.width = '60px';
+        imgEl.style.height = '60px';
+        imgEl.style.borderRadius = '5px';
+        imgEl.style.objectFit = 'cover';
+        imgEl.style.border = '1px solid #e2e8f0';
+        imgEl.setAttribute('data-existing', 'true');
+        previewContainer.appendChild(imgEl);
     }
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -184,6 +307,11 @@ function editProduct(product) {
 
 <style>
 .hidden { display: none !important; }
+@media (max-width: 768px) {
+    #productForm { padding: 1.5rem !important; }
+    #productForm form { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+    .container { padding: 1.5rem 4% !important; }
+}
 </style>
 
 <?php include '../includes/footer.php'; ?>

@@ -31,14 +31,22 @@ body {
 
 .gradient-text {
     background: var(--gold-gradient);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate {
@@ -57,7 +65,7 @@ header {
     justify-content: center;
     background: white;
     border-bottom: 1px solid #fee2e2;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     padding: 0 5%;
 }
 
@@ -141,6 +149,47 @@ header {
 .btn-dark {
     background: var(--dark);
     color: white;
+    border-radius: 8px;
+    /* Modern rounded default */
+}
+
+/* New Modern Add to Cart Button Style */
+.btn-add {
+    background: var(--dark);
+    color: white;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    /* Pill shape */
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-add:hover {
+    background: #1e293b;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add i {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .btn-add {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+        border-radius: 6px;
+        gap: 0.3rem;
+        width: auto;
+    }
 }
 
 /* Hero Section */
@@ -235,29 +284,357 @@ header {
     object-fit: cover;
 }
 
-/* Utility */
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .nav-group {
+        gap: 1.5rem;
+    }
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 4rem;
+    }
 }
 
-.text-center { text-align: center; }
-.mb-2 { margin-bottom: 2rem; }
-
-.flex {
-    display: flex;
-    align-items: center;
-}
-.gap-4 { gap: 1rem; }
-.gap-2 { gap: 0.5rem; }
-
-footer {
-    display: flex;
-    justify-content: center;
-    padding: 3rem 5%;
+/* Mobile Menu Button - Hidden on Desktop */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--dark);
+    cursor: pointer;
 }
 
-.footer-inner {
-    width: 100%;
-    max-width: 1280px;
+
+/* Mobile App Interface Styles */
+.mobile-app-header,
+.mobile-bottom-nav {
+    display: none;
+}
+
+/* Consolidated Mobile Fixes (Covers all mobile devices) */
+@media (max-width: 768px) {
+
+    /* 1. Global Overflow Fix (Prevents Horizontal Scroll) */
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden !important;
+        position: relative;
+    }
+
+    /* 2. Reset Global Container & Main Padding */
+    .container,
+    main.container {
+        /* INCREASED Top to 180px to safely clear header */
+        padding: 180px 10px 100px 10px !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Fix Glass Cards Padding (Login/Register) */
+    .glass {
+        padding: 1.5rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Force Google Login Button & Iframes to fit */
+    iframe,
+    .g_id_signin,
+    #g_id_onload {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 5. Resize Large Headings Globally */
+    h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    h2 {
+        font-size: 1.4rem !important;
+    }
+
+    h3 {
+        font-size: 1.1rem !important;
+    }
+
+    p {
+        font-size: 0.9rem !important;
+    }
+
+    /* 6. Fix Tables (Order History) */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* 7. Product Grid & Image Fixes */
+    .product-grid {
+        /* minmax(0, 1fr) prevents items from overflowing container */
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        padding: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .card {
+        padding: 0.5rem !important;
+        width: 100% !important;
+        margin: 0 !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .card-img {
+        height: auto !important;
+        width: 100% !important;
+        aspect-ratio: 1/1;
+        background: white;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        /* Clips anything outside */
+    }
+
+    .card-img img {
+        object-fit: contain !important;
+        /* Forces image to fit INSIDE */
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* 8. Hide Desktop Header */
+    .desktop-header {
+        display: none !important;
+    }
+
+    /* 9. Show Mobile Elements */
+    .mobile-app-header,
+    .mobile-bottom-nav {
+        display: block;
+    }
+
+    /* Mobile Header Styling */
+    .mobile-app-header {
+        background: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        /* Removed max-height to let content dictate height (fixes cut-off background) */
+        z-index: 9999;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        padding-bottom: 0px;
+    }
+
+    .mobile-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1rem;
+    }
+
+    .mobile-search-area {
+        padding: 0 1rem 0.8rem;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-input-wrapper input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 2.8rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #f8fafc;
+        font-size: 0.95rem;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .search-input-wrapper .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    /* Mobile Categories Tabs */
+    .mobile-categories-tabs {
+        display: flex;
+        overflow-x: auto;
+        padding: 0 1rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        scrollbar-width: none;
+        background: white;
+        /* Ensure solid background */
+    }
+
+    .mobile-categories-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-categories-tabs a {
+        padding: 0.8rem 0;
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        position: relative;
+        opacity: 0.7;
+    }
+
+    .mobile-categories-tabs a.active {
+        color: var(--primary);
+        font-weight: 600;
+        opacity: 1;
+    }
+
+    .mobile-categories-tabs a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 3px 3px 0 0;
+    }
+
+    /* Bottom Navigation */
+    .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 0.8rem 0.5rem;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 10000;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #64748b;
+        font-size: 0.75rem;
+        gap: 0.3rem;
+        position: relative;
+        width: calc(100% / 6);
+        /* Adjusted for 6 items */
+    }
+
+    .nav-item i {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+    }
+
+    .nav-item.active {
+        color: var(--primary);
+    }
+
+    .nav-item.active i {
+        transform: translateY(-2px);
+        transition: 0.3s;
+    }
+
+    /* Chat Widget Fix */
+    iframe[title*="chat"],
+    .fb_reset,
+    #tawk-chat-minified-wrapper,
+    div[class*="tawk"] {
+        bottom: 90px !important;
+    }
+
+    .mobile-cart-badge {
+        position: absolute;
+        top: -5px;
+        right: 20%;
+        background: var(--primary);
+        color: white;
+        font-size: 0.65rem;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    /* Button Tweak */
+    .hero p {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+}
+
+/* Page Title Responsive Styles */
+.page-title {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.5rem;
+        /* Smaller size for mobile to prevent zoom-out */
+    }
+
+    /* 10. Fix Product Actions (Price/Add Button) on Mobile */
+    .product-actions {
+        gap: 0.5rem !important;
+        align-items: center !important;
+    }
+
+    .product-actions .add-btn {
+        padding: 0 0.5rem !important;
+        font-size: 0.65rem !important;
+        height: 28px !important;
+        /* Smaller height */
+        line-height: 28px !important;
+        margin-left: 0 !important;
+        /* Reset inline margin to use gap */
+        width: auto !important;
+        min-width: 50px !important;
+    }
+
+    .product-actions .qty-btn,
+    .product-actions .qty-val {
+        height: 28px !important;
+        width: 28px !important;
+        line-height: 28px !important;
+        min-width: 28px !important;
+        font-size: 0.8rem !important;
+        padding: 0 !important;
+    }
 }

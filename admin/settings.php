@@ -10,7 +10,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
 
 // Ensure default settings exist
 $defaults = [
-    'site_name' => 'GlamCart',
+    'site_name' => 'ZoonaCart',
     'site_description' => 'Premium Boutique Experience',
     'hero_title' => 'Redefining Elegance',
     'hero_subtitle' => 'Discover professional-grade cosmetics crafted for your radiant beauty.',
@@ -145,6 +145,45 @@ include '../includes/header.php';
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">New Password</label>
                     <input type="password" name="admin_password" placeholder="Leave blank to keep current" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+            </div>
+
+            <!-- Email Configuration (SMTP) -->
+            <div>
+                <h3 style="margin-bottom: 2rem;">Email Settings (SMTP)</h3>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">SMTP Host</label>
+                    <input type="text" name="smtp_host" value="<?php echo $settings['smtp_host'] ?? 'smtp.gmail.com'; ?>" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Sender Email</label>
+                    <input type="text" name="smtp_email" value="<?php echo $settings['smtp_email'] ?? ''; ?>" placeholder="your-email@gmail.com" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">App Password</label>
+                    <input type="password" name="smtp_password" value="<?php echo $settings['smtp_password'] ?? ''; ?>" placeholder="Gmail App Password" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+            </div>
+            
+            <!-- Google Login -->
+            <div>
+                <h3 style="margin-bottom: 2rem;">Social Login</h3>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Google Client ID</label>
+                    <input type="text" name="google_client_id" value="<?php echo $settings['google_client_id'] ?? ''; ?>" placeholder="xxx.apps.googleusercontent.com" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+            </div>
+
+            <!-- Shiprocket Integration -->
+            <div>
+                <h3 style="margin-bottom: 2rem;">Shiprocket Integration</h3>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">User Email</label>
+                    <input type="email" name="shiprocket_email" value="<?php echo $settings['shiprocket_email'] ?? ''; ?>" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Password</label>
+                    <input type="password" name="shiprocket_password" value="<?php echo $settings['shiprocket_password'] ?? ''; ?>" style="width: 100%; padding: 1rem; border-radius: 0; border: 1px solid #e2e8f0; outline: none;">
                 </div>
             </div>
         </div>

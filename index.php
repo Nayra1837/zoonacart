@@ -27,6 +27,6 @@ include 'includes/header.php';
     </div>
 </section>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=<?php echo time(); ?>"></script>
 
 <?php include 'includes/footer.php'; ?>

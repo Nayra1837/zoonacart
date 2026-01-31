@@ -15,7 +15,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <a href="products.php" class="btn" style="background: <?php echo $currentPage === 'products.php' ? 'var(--dark)' : '#f1f5f9'; ?>; color: <?php echo $currentPage === 'products.php' ? 'white' : '#64748b'; ?>; display: flex; align-items: center; gap: 0.5rem; border-radius: 0;">
         <i class="fa-solid fa-box-open"></i> Manage Products
     </a>
-    <a href="orders.php" class="btn" style="background: <?php echo $currentPage === 'orders.php' ? 'var(--primary)' : '#f1f5f9'; ?>; color: <?php echo $currentPage === 'orders.php' ? 'white' : '#64748b'; ?>; display: flex; align-items: center; gap: 0.5rem; border-radius: 0;">
+    <a href="orders.php" class="btn" style="background: <?php echo $currentPage === 'orders.php' ? 'var(--dark)' : '#f1f5f9'; ?>; color: <?php echo $currentPage === 'orders.php' ? 'white' : '#64748b'; ?>; display: flex; align-items: center; gap: 0.5rem; border-radius: 0;">
         <i class="fa-solid fa-cart-shopping"></i> View Orders
+    </a>
+    <a href="returns.php" class="btn" style="background: <?php echo $currentPage === 'returns.php' ? 'var(--dark)' : '#f1f5f9'; ?>; color: <?php echo $currentPage === 'returns.php' ? 'white' : '#64748b'; ?>; display: flex; align-items: center; gap: 0.5rem; border-radius: 0;">
+        <i class="fa-solid fa-rotate-left"></i> Manage Returns
+    </a>
+    <a href="withdrawals.php" class="btn" style="background: <?php echo $currentPage === 'withdrawals.php' ? 'var(--dark)' : '#f1f5f9'; ?>; color: <?php echo $currentPage === 'withdrawals.php' ? 'white' : '#64748b'; ?>; display: flex; align-items: center; gap: 0.5rem; border-radius: 0;">
+        <i class="fa-solid fa-money-bill-transfer"></i> Withdrawals
     </a>
 </div>
