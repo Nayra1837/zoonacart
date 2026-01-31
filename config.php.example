@@ -1,0 +1,34 @@
+<?php
+// Environment Detection
+$is_local = (php_sapi_name() === 'cli') || 
+            (isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) || 
+            (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost');
+
+if ($is_local) {
+    // LOCAL XAMPP SETTINGS
+    $host = 'localhost';
+    $user = 'root';
+    $pass = ''; 
+    $dbname = 'zoonacart';
+} else {
+    // LIVE SERVER SETTINGS
+    $host = 'your_live_host';
+    $user = 'your_live_username';
+    $pass = 'your_live_password';
+    $dbname = 'your_live_db';
+}
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
+session_start();
+
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/zoonacart/'); // Adjust this path
+}
+define('ASSETS_URL', BASE_URL . 'assets/');
