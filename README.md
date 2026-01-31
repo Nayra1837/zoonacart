@@ -11,122 +11,61 @@ PHP, MySQL, and vanilla JavaScript.
 
 ------------------------------------------------------------------------
 
-## ✨ Features
+## ✨ Advanced Features
 
-### 🛍️ Customer Features
+### 🛍️ Customer Experience
+- **One-Tap Google Login**: Secure and seamless authentication using Google Identity Services.
+- **Native Digital Wallet**: Prepaid balance system for faster checkout and instant refunds.
+- **Dynamic GST Engine**: Automatic tax calculation based on HSN codes (CGST/SGST/IGST).
+- **Premium PDF Invoices**: Professional, Amazon-style tax invoices generated on-the-fly.
+- **Returns Workflow**: Structured return request system with admin approval.
+- **Wallet Ledger**: Full transaction history for transparency.
 
--   Browse cosmetics product catalog\
--   Add products to cart with quantity selection\
--   Secure checkout (Cash on Delivery)\
--   View order history & download receipts\
--   User profile management
-
-### 👨‍💼 Admin Features
-
--   Admin dashboard with analytics\
--   Product management (Add / Edit / Delete)\
--   Order management and status update\
--   User management\
--   Site settings and branding control
+### 👨‍💼 Business Management (Admin)
+- **Advanced Dashboard**: Real-time sales analytics with interactive charts.
+- **Inventory & Tax Control**: Manage products with integrated HSN and Tax % settings.
+- **Financial Control**: Approve return requests and manage wallet balances.
+- **Modular Architecture**: 3-Tier architecture for scalability and clean code.
 
 ------------------------------------------------------------------------
 
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-
--   XAMPP (Apache, PHP, MySQL)\
--   PHP 8.0 or higher\
--   MySQL 5.7 or higher
-
-------------------------------------------------------------------------
-
-### Step 1: Start XAMPP
-
-1.  Open **XAMPP Control Panel**
-2.  Start **Apache** and **MySQL**
+- **XAMPP** (Apache, PHP 8.2+, MySQL)
+- **SMTP Mailer**: Configured in `config.php` for OTP and verification emails.
+- **Google Client ID**: For authentication features.
 
 ------------------------------------------------------------------------
 
-### Step 2: Place Project Files
+### Setup Steps
 
-Copy the project folder to:
-
-    C:\xampp\htdocs\zoonacart
-
-------------------------------------------------------------------------
-
-### Step 3: Create Database
-
-1.  Open: http://localhost/phpmyadmin\
-2.  Click **New**
-3.  Database Name:
-
-```{=html}
-<!-- -->
-```
-    zoonacart
-
-4.  Click **Create**
-
-------------------------------------------------------------------------
-
-### Step 4: Import Database
-
-1.  Select **zoonacart** database\
-2.  Click **Import**\
-3.  Choose file:
-
-```{=html}
-<!-- -->
-```
-    C:\xampp\htdocs\zoonacart\database.sql
-
-4.  Click **Go**
-
-------------------------------------------------------------------------
-
-### Step 5: Seed Sample Products (Optional)
-
-    http://localhost/zoonacart/seed.php
-
-------------------------------------------------------------------------
-
-### Step 6: Run Project
-
-    http://localhost/zoonacart/
-
-------------------------------------------------------------------------
-
-## 🔐 Default Admin Login
-
-  Role    Email                 Password
-  ------- --------------------- ----------
-  Admin   admin@zoonacart.com   admin123
+1. **Start XAMPP**: Open XAMPP Control Panel and start **Apache** and **MySQL**.
+2. **Place Project**: Copy the project folder to `C:\xampp\htdocs\zoonacart`.
+3. **Database Setup**:
+   - Create a database named `zoonacart` in phpMyAdmin.
+   - Import `database.sql` to initialize tables.
+   - Run `fix_db.php` in your browser to ensure the latest schema is applied.
+4. **Seed Content**: Run `db_seeder.php` or `seed_images.php` to populate core products.
+5. **SMTP & Config**: Update `config.php` with your Gmail App Password and Google Client ID.
 
 ------------------------------------------------------------------------
 
 ## 📁 Project Structure
 
-    zoonacart/
-    ├── admin/
-    ├── api/
-    ├── assets/
-    │   ├── img/
-    │   └── style.css
-    ├── includes/
-    ├── js/
-    ├── index.php
-    ├── shop.php
-    ├── cart.php
-    ├── checkout.php
-    ├── login.php
-    ├── register.php
-    ├── profile.php
-    ├── receipt.php
-    ├── config.php
-    ├── database.sql
-    └── seed.php
+```text
+zoonacart/
+├── admin/          # Admin Control Center (Orders, Products, Returns)
+├── api/            # Central API Endpoint for AJAX actions
+├── assets/         # CSS, JS, and Product Images
+├── includes/       # Core Logic (Mailer, Shiprocket, Database, Functions)
+├── js/             # Frontend Logic (Cart, Wallet, Auth)
+├── profile.php     # User Account & Verification Settings
+├── wallet.php      # Digital Balance & Transaction History
+├── shop.php        # Fast-loading Catalog with Search
+├── receipt.php     # Premium PDF Invoice Generator
+└── config.php      # Environment & Secret Configuration
+```
 
 ------------------------------------------------------------------------
 
